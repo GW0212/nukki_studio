@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>누끼 스튜디오</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <img class="brand__icon" src="assets/favicon.svg" alt="" />
+      <h1 class="brand__title">누끼 스튜디오</h1>
+    </div>
+    <div class="header-actions">
+      <button id="btnResetTop" class="btn ghost">새로 시작</button>
+      <button id="btnHelpTop" class="btn ghost">도움말</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Upload -->
+    <section class="card upload" id="uploadCard">
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="사진 업로드">
+        <div class="dz-icon">✨</div>
+        <div class="dz-title">사진 업로드</div>
+        <div class="dz-desc">드래그&드롭 또는 클릭해서 파일 선택</div>
+        <button id="btnPick" class="btn primary">사진 불러오기</button>
+        <input id="fileInput" type="file" accept="image/*" hidden />
+      </div>
+    </section>
+
+    <!-- Editor -->
+    <section class="card editor" id="editorCard" hidden>
+      <div class="editor-top">
+        <div class="tool-tabs" role="tablist" aria-label="편집 도구">
+          <button class="tab active" id="tabErase" data-mode="erase" role="tab" aria-selected="true">누끼(지우기)</button>
+          <button class="tab" id="tabRestore" data-mode="restore" role="tab" aria-selected="false">복원</button>
+        </div>
+
+        <div class="slider-row">
+          <div class="label">브러시 크기</div>
+          <input id="brushSize" type="range" min="2" max="120" value="20" />
+          <div class="pill"><span id="brushSizeVal">20</span></div>
+        </div>
+
+        <!-- Brush shape selector + zoom indicator -->
+        <div class="shape-row" aria-label="브러시 모양 및 확대 비율">
+          <div class="shape-group" role="group" aria-label="브러시 모양 선택">
+            <button type="button" class="shape-btn active" data-shape="circle" aria-pressed="true" title="동그라미">●</button>
+            <button type="button" class="shape-btn" data-shape="square" aria-pressed="false" title="네모">■</button>
+            <button type="button" class="shape-btn" data-shape="triangle" aria-pressed="false" title="세모">▲</button>
+            <button type="button" class="shape-btn" data-shape="star" aria-pressed="false" title="별">★</button>
+          </div>
+
+          <div class="pill zoom-indicator" aria-label="현재 확대 비율" title="확대 비율">
+            <span id="zoomPct">100</span>%
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-wrap">
+        <div class="stage-head"></div>
+        <div class="stage" id="stage">
+          <canvas id="view"></canvas>
+          <button id="tapLeft" class="edgeTap edgeTap--left" aria-label="왼쪽으로 이동" type="button"><span aria-hidden="true">‹</span></button>
+          <button id="tapRight" class="edgeTap edgeTap--right" aria-label="오른쪽으로 이동" type="button"><span aria-hidden="true">›</span></button>
+        </div>
+      </div>
+
+      <!-- Bottom action row (ONE LINE) -->
+      <div class="stage-bottom">
+        <div class="bottom-actions" role="group" aria-label="작업 버튼">
+          <button id="btnUndo" class="btn" disabled>되돌리기</button>
+          <button id="btnRedo" class="btn" disabled>다시하기</button>
+          <button id="btnBeforeAfter" class="btn ghost">Before/After</button>
+          <button id="btnDone" class="btn primary">저장</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Help modal -->
+    <div class="ns-modal" id="helpModal" hidden>
+      <div class="modal__backdrop" id="helpBackdrop"></div>
+      <div class="modal__panel" role="dialog" aria-modal="true" aria-label="도움말">
+        <div class="ns-modal__title">도움말</div>
+        <ul class="modal__list">
+          <li><b>누끼(지우기)</b>: 드래그로 투명 처리</li>
+          <li><b>복원</b>: 드래그로 다시 살리기</li>
+          <li><b>Ctrl/Cmd + Z</b>: Undo</li>
+          <li><b>Ctrl/Cmd + Y</b> 또는 <b>Shift + Ctrl/Cmd + Z</b>: Redo</li>
+          <li><b>Before/After</b>: 누르고 있는 동안 원본 보기</li>
+        </ul>
+        <div class="ns-modal__actions">
+          <button id="btnHelpClose" class="btn primary">닫기</button>
+        </div>
+      </div>
+    </div>
+  </main>
+<!-- Confirm Modal -->
+  <div id="confirmOverlay" class="ns-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="ns-modal">
+      <div class="ns-modal__title" id="confirmTitle">새로운 작업을 시작하시겠습니까?</div>
+      <div class="ns-modal__actions">
+        <button id="confirmYes" class="btn primary">예</button>
+        <button id="confirmNo" class="btn ghost">아니오</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
